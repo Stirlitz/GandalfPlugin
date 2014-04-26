@@ -1,0 +1,20 @@
+name: gandalf
+main: gandalf.gandalf
+version: 0.0.1
+
+commands:
+  gandalf:
+    description: You cannot pass!
+    usage: /gandalf
+    permission: gandalf.gandalf
+    permission-manage: No, YOU cannot pass!
+    
+permissions:
+  gandalf.*:
+    description: Gives access to all gandalf commands
+    default: op
+    children:
+      gandalf.gandalf: true
+  gandalf.gandalf:
+    description: The primary permission
+    default: op
