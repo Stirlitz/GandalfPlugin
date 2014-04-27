@@ -16,6 +16,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Zombie;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.ntcomputer.minecraft.controllablemobs.api.ControllableMob;
@@ -26,8 +28,21 @@ public class gandalf extends JavaPlugin {
 	 private HashMap<Player,ControllableMob<Villager>> villagerMap;
 	 
 	 private void spawnVillager(Player owner, Location spawnLocation) {
+		 this.cleanVillager(owner);
 		 Villager villager = spawnLocation.getWorld().spawn(spawnLocation, Villager.class);
-		 ControllableMob<Villager> controlledVillager = ControllableMobs.assign(villager, true);
+		 ControllableMob<Villager> controlledVillager = ControllableMobs.putUnderControl(villager);
+	 }
+	 
+	 private void cleanVillager(Player owner) {
+		 if(this.villagerMap.containsKey(owner)) {
+			 ControllableMob<Villager> controlledVillager = this.villagerMap.get(owner);
+			 controlledVillager.getActions().die();this.villagerMap.remove(owner);
+		 }
+	 }
+	 
+	 @EventHandler
+	 public void onPlayerLeave(PlayerQuitEvent event){
+		 this.cleanVillager(event.getPlayer());
 	 }
 	 
 	 @Override
@@ -38,6 +53,11 @@ public class gandalf extends JavaPlugin {
 	 @Override
 	 public void onDisable() {
 	     getLogger().info("gandalf.onDisable has been invoked!");
+	     for(ControllableMob<Villager> controlledVillager: this.villagerMap.values()) {
+	    	 controlledVillager.getActions().die();
+	     }
+	     this.villagerMap.clear();
+	     this.villagerMap = null;
 	 }
 
 	 @Override
@@ -47,8 +67,8 @@ public class gandalf extends JavaPlugin {
 	             Player player = (Player)sender;
 	             Location loc = player.getLocation();
 	             loc.setX(loc.getX() + 5);
-	             World w = Bukkit.getWorld("world");
-	             this.spawnVillager(loc);
+//	             World w = Bukkit.getWorld("world");
+	             this.spawnVillager(player, loc);
 //	             Entity bro = w.spawnEntity(loc, EntityType.VILLAGER);
 //	             Block b = loc.getBlock();
 //	             b.setType(Material.STONE);
