@@ -13,51 +13,41 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import de.ntcomputer.minecraft.controllablemobs.api.ControllableMob;
 import de.ntcomputer.minecraft.controllablemobs.api.ControllableMobs;
 
 public class gandalf extends JavaPlugin {
 	
-	 private HashMap<Player,ControllableMob<Villager>> villagerMap;
-	 
-	 private void spawnVillager(Player owner, Location spawnLocation) {
-		 this.cleanVillager(owner);
-		 Villager villager = spawnLocation.getWorld().spawn(spawnLocation, Villager.class);
-		 ControllableMob<Villager> controlledVillager = ControllableMobs.putUnderControl(villager);
-	 }
-	 
-	 private void cleanVillager(Player owner) {
-		 if(this.villagerMap.containsKey(owner)) {
-			 ControllableMob<Villager> controlledVillager = this.villagerMap.get(owner);
-			 controlledVillager.getActions().die();this.villagerMap.remove(owner);
-		 }
-	 }
-	 
-	 @EventHandler
-	 public void onPlayerLeave(PlayerQuitEvent event){
-		 this.cleanVillager(event.getPlayer());
-	 }
-	 
+/*	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onEntitySpawn(CreatureSpawnEvent event){
+		LivingEntity entity = event.getEntity();
+		
+		if (entity.getType() == EntityType.VILLAGER){
+			EntityInsentient nmsEntity = (EntityInsentient) ((CraftLivingEntity) entity).getHandle();
+			
+		}
+	}*/
+	
+	
 	 @Override
 	 public void onEnable() {
 	     getLogger().info("gandalf.onEnable has been invoked!");
-	     this.villagerMap = new HashMap<Player,ControllableMob<Villager>>();
 	 }
 	 @Override
 	 public void onDisable() {
 	     getLogger().info("gandalf.onDisable has been invoked!");
-	     for(ControllableMob<Villager> controlledVillager: this.villagerMap.values()) {
-	    	 controlledVillager.getActions().die();
-	     }
-	     this.villagerMap.clear();
-	     this.villagerMap = null;
 	 }
 
 	 @Override
@@ -67,9 +57,9 @@ public class gandalf extends JavaPlugin {
 	             Player player = (Player)sender;
 	             Location loc = player.getLocation();
 	             loc.setX(loc.getX() + 5);
-//	             World w = Bukkit.getWorld("world");
-	             this.spawnVillager(player, loc);
-//	             Entity bro = w.spawnEntity(loc, EntityType.VILLAGER);
+	             World w = Bukkit.getWorld("world");
+	             LivingEntity bro = (LivingEntity) w.spawnEntity(loc, EntityType.VILLAGER);
+	             bro.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 2000, 5));
 //	             Block b = loc.getBlock();
 //	             b.setType(Material.STONE);
 	             Bukkit.getServer().broadcastMessage(ChatColor.LIGHT_PURPLE + /*player.getName() + */": You cannot pass!" );

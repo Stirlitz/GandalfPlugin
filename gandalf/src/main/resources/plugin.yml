@@ -18,5 +18,3 @@ permissions:
   gandalf.gandalf:
     description: The primary permission
     default: op
-    
-depend: [ControllableMobsAPI]
