@@ -29,7 +29,7 @@ public class gandalf extends JavaPlugin {
 	}*/
 	
 	LivingEntity bro, balrog;
-	Location loc;
+	Location disableLoc;
 	
 	
 	 @Override
@@ -44,12 +44,13 @@ public class gandalf extends JavaPlugin {
 	    	 balrog.damage(10000);
 	     } catch (NullPointerException e) {}
 	     try {
-	    	 loc.setZ(loc.getZ() - 10);
-	    	 loc.setY(loc.getY() - 2);
+//	    	 disableLoc.setZ(loc.getZ() - 10);
+//	    	 loc.setY(loc.getY() - 2);
+	    	 disableLoc.setX(disableLoc.getX() + 5);
          for (int i = 0; i < 10; i++) {
-        	 Block b = loc.getBlock();
+        	 Block b = disableLoc.getBlock();
         	 b.setType(Material.AIR);
-        	 loc.setZ(loc.getZ() + 1);
+        	 disableLoc.setZ(disableLoc.getZ() + 1);
          }
 	     } catch (NullPointerException e) {}
 	     
@@ -60,11 +61,16 @@ public class gandalf extends JavaPlugin {
 	     if (cmd.getName().equalsIgnoreCase("gandalf")) {
 	         if (sender instanceof Player) {
 	             Player player = (Player)sender;
-	             Location initLoc = player.getLocation();
-	             loc = initLoc;
-	             Location uLoc = loc;
+	             Location playerLoc = player.getLocation();
+	             disableLoc = player.getLocation();
+	             Location loc = player.getLocation();
+	             Location uLoc = player.getLocation();
+	             final Location sphereLoc = player.getLocation();
 	             loc.setX(loc.getX() + 5);
-	             World w = Bukkit.getWorld("world");
+	             final World world = Bukkit.getWorld("world");
+	             
+	             uLoc.setY(uLoc.getY() + 2);
+	             uLoc.setX(uLoc.getX() + 5);
 	             
 	             for (int i = 0; i < 10; i++) {
 	            	 Block b = loc.getBlock();
@@ -72,16 +78,14 @@ public class gandalf extends JavaPlugin {
 	            	 loc.setZ(loc.getZ() + 1);
 	             }
 	             
-	             uLoc.setZ(uLoc.getZ() - 10);
-	             uLoc.setY(uLoc.getY() + 2);
+
 	             
-	             bro = (LivingEntity) w.spawnEntity(uLoc, EntityType.VILLAGER);
+	             bro = (LivingEntity) world.spawnEntity(uLoc, EntityType.VILLAGER);
 	             bro.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2000, 5));
-	             loc.setZ(loc.getZ() + 10);
-	             balrog = (LivingEntity) w.spawnEntity(uLoc, EntityType.GIANT);
+	             uLoc.setZ(uLoc.getZ() + 10);
+	             balrog = (LivingEntity) world.spawnEntity(uLoc, EntityType.GIANT);
 	             balrog.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2000, 5));
-//	             Block b = loc.getBlock();
-//	             b.setType(Material.STONE);
+
 	             
 	             int wait = 0;
 	             
@@ -106,10 +110,59 @@ public class gandalf extends JavaPlugin {
 	             wait = wait + 30;
 	             scheduleA.scheduleSyncDelayedTask(this, new Runnable() {
 	            	 public void run() {
-	    	             Bukkit.getServer().broadcastMessage(ChatColor.LIGHT_PURPLE + /*player.getName() + */"I am a servant ofthe secret fire," );
+	    	             Bukkit.getServer().broadcastMessage(ChatColor.LIGHT_PURPLE + /*player.getName() + */"I am a servant of the secret fire," );
 	    	             Bukkit.getServer().broadcastMessage(ChatColor.LIGHT_PURPLE + /*player.getName() + */"wielder of the Flame of Anor." );
 					} 
 	             }, wait);
+	             
+	             wait = wait + 30;
+	             scheduleA.scheduleSyncDelayedTask(this, new Runnable() {
+	            	 public void run() {
+	    	             sphereLoc.setY(sphereLoc.getY() + 2);
+	    	             sphereLoc.setX(sphereLoc.getX() + 5);
+	    	             		int sphereRadius = 3;
+	    		             	int cx = sphereLoc.getBlockX();
+	    		             	int cy = sphereLoc.getBlockY();
+	    		             	int cz = sphereLoc.getBlockZ();
+	    		             	int rSquared = sphereRadius * sphereRadius;
+	    		            
+	    		            
+	    		             	for (int x = cx - sphereRadius; x <= cx + sphereRadius; x++) {
+	    		             		for (int z = cz - sphereRadius; z <= cz + sphereRadius; z++) {
+	    		             			if ((cx - x) * (cx -x) + (cz - z) * (cz - z) <= rSquared && (cx - x) * (cx - x) + (cz - z) * (cz - z) > 4 ) {
+	    		             				final Location l = new Location(world, x, cy, z);
+	    		             				if(l.getBlock().getType().toString().equalsIgnoreCase("air"))
+	    		             					l.getBlock().setType(Material.SPONGE);
+	    		             			}
+	    		             		}
+	    		             	}
+					} 
+	             }, wait);
+	             
+	             wait = wait + 30;
+	             scheduleA.scheduleSyncDelayedTask(this, new Runnable() {
+	            	 public void run() {
+	    	             		int sphereRadius = 3;
+	    		             	int cx = sphereLoc.getBlockX();
+	    		             	int cy = sphereLoc.getBlockY();
+	    		             	int cz = sphereLoc.getBlockZ();
+	    		             	int rSquared = sphereRadius * sphereRadius;
+	    		            
+	    		            
+	    		             	for (int x = cx - sphereRadius; x <= cx + sphereRadius; x++) {
+	    		             		for (int z = cz - sphereRadius; z <= cz + sphereRadius; z++) {
+	    		             			if ((cx - x) * (cx -x) + (cz - z) * (cz - z) <= rSquared && (cx - x) * (cx - x) + (cz - z) * (cz - z) > 4 ) {
+	    		             				final Location l = new Location(world, x, cy, z);
+	    		             				if(l.getBlock().getType().toString().equalsIgnoreCase("air"))
+	    		             					l.getBlock().setType(Material.AIR);
+	    		             			}
+	    		             		}
+	    		             	}
+					} 
+	             }, wait);
+	             
+
+	     
 	             
 	             
 	             
