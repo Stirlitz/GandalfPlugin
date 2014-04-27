@@ -83,12 +83,36 @@ public class gandalf extends JavaPlugin {
 //	             Block b = loc.getBlock();
 //	             b.setType(Material.STONE);
 	             
+	             int wait = 0;
+	             
+	             wait = wait + 40;
 	             BukkitScheduler scheduleA = Bukkit.getServer().getScheduler();
 	             scheduleA.scheduleSyncDelayedTask(this, new Runnable() {
 	            	 public void run() {
 	    	             Bukkit.getServer().broadcastMessage(ChatColor.LIGHT_PURPLE + /*player.getName() + */"You cannot pass!" );
+	    	             balrog.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 2000, 10));
 					} 
-	             }, 40L);
+	             }, wait);
+	             
+
+	             wait = wait + 30;
+	             scheduleA.scheduleSyncDelayedTask(this, new Runnable() {
+	            	 public void run() {
+	    	             Bukkit.getServer().broadcastMessage(ChatColor.RED + /*player.getName() + */"<Balrog noises>" );
+	    	             balrog.setFireTicks(2000);
+					} 
+	             }, wait);
+	             
+	             wait = wait + 30;
+	             scheduleA.scheduleSyncDelayedTask(this, new Runnable() {
+	            	 public void run() {
+	    	             Bukkit.getServer().broadcastMessage(ChatColor.LIGHT_PURPLE + /*player.getName() + */"I am a servant ofthe secret fire," );
+	    	             Bukkit.getServer().broadcastMessage(ChatColor.LIGHT_PURPLE + /*player.getName() + */"wielder of the Flame of Anor." );
+					} 
+	             }, wait);
+	             
+	             
+	             
 	             
 	             
 
