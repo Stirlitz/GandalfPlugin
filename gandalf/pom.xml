@@ -31,5 +31,12 @@
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>de.ntcomputer.minecraft.controllablemobs.api</groupId>
+            <artifactId>controllablemobs</artifactId>
+            <version>1.7.2.6-alpha2</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
