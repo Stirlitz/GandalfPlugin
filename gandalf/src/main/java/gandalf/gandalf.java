@@ -153,7 +153,7 @@ public class gandalf extends JavaPlugin {
 	    		             		for (int z = cz - sphereRadius; z <= cz + sphereRadius; z++) {
 	    		             			if ((cx - x) * (cx -x) + (cz - z) * (cz - z) <= rSquared && (cx - x) * (cx - x) + (cz - z) * (cz - z) > 4 ) {
 	    		             				final Location l = new Location(world, x, cy, z);
-	    		             				if(l.getBlock().getType().toString().equalsIgnoreCase("air"))
+//	    		             				if(l.getBlock().getType().toString().equalsIgnoreCase("air"))
 	    		             					l.getBlock().setType(Material.AIR);
 	    		             			}
 	    		             		}
