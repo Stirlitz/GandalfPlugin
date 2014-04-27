@@ -3,7 +3,9 @@ package gandalf;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
@@ -27,6 +29,7 @@ public class gandalf extends JavaPlugin {
 	}*/
 	
 	LivingEntity bro, balrog;
+	Location loc;
 	
 	
 	 @Override
@@ -40,6 +43,15 @@ public class gandalf extends JavaPlugin {
 	    	 bro.damage(10000);
 	    	 balrog.damage(10000);
 	     } catch (NullPointerException e) {}
+	     try {
+	    	 loc.setZ(loc.getZ() - 10);
+	    	 loc.setY(loc.getY() - 2);
+         for (int i = 0; i < 10; i++) {
+        	 Block b = loc.getBlock();
+        	 b.setType(Material.AIR);
+        	 loc.setZ(loc.getZ() + 1);
+         }
+	     } catch (NullPointerException e) {}
 	     
 	 }
 
@@ -48,13 +60,25 @@ public class gandalf extends JavaPlugin {
 	     if (cmd.getName().equalsIgnoreCase("gandalf")) {
 	         if (sender instanceof Player) {
 	             Player player = (Player)sender;
-	             Location loc = player.getLocation();
+	             Location initLoc = player.getLocation();
+	             loc = initLoc;
+	             Location uLoc = loc;
 	             loc.setX(loc.getX() + 5);
 	             World w = Bukkit.getWorld("world");
-	             bro = (LivingEntity) w.spawnEntity(loc, EntityType.VILLAGER);
+	             
+	             for (int i = 0; i < 10; i++) {
+	            	 Block b = loc.getBlock();
+	            	 b.setType(Material.STONE);
+	            	 loc.setZ(loc.getZ() + 1);
+	             }
+	             
+	             uLoc.setZ(uLoc.getZ() - 10);
+	             uLoc.setY(uLoc.getY() + 2);
+	             
+	             bro = (LivingEntity) w.spawnEntity(uLoc, EntityType.VILLAGER);
 	             bro.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2000, 5));
 	             loc.setZ(loc.getZ() + 10);
-	             balrog = (LivingEntity) w.spawnEntity(loc, EntityType.GIANT);
+	             balrog = (LivingEntity) w.spawnEntity(uLoc, EntityType.GIANT);
 	             balrog.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 2000, 5));
 //	             Block b = loc.getBlock();
 //	             b.setType(Material.STONE);
